@@ -5,6 +5,7 @@ import Target from './Target';
 
 const Grid = () => {
     const [grid,setGrid] = useState([]);
+    const [,forceRender] = useState()
     const [activeTargets,setActiveTargets] = useState([]);
 
     const shuffle = (arr) => {
@@ -12,30 +13,18 @@ const Grid = () => {
     }
 
     const targetClick = useCallback((x,y) => {
-        let temp = grid;
-        console.log("temp",temp)
-        temp.push([x,y]);
-        temp = shuffle(temp);
-        let targets = activeTargets; 
-        console.log("targets",targets)
-        let pos = temp.pop()
-        targets.push(<Target onClick={() => {targetClick(pos[0],pos[1])}} xValue={pos[0]} yValue={pos[1]} fade={5}/>)
-        setGrid(temp);
-        setActiveTargets(targets);
-      }, [activeTargets,grid]);
-
-    // const targetClick = (x,y) => {
-    //     let temp = grid;
-    //     console.log("temp",temp)
-    //     temp.push([x,y]);
-    //     temp = shuffle(temp);
-    //     let targets = activeTargets; 
-    //     console.log("targets",targets)
-    //     let pos = temp.pop()
-    //     targets.push(<Target onClick={() => {targetClick(pos[0],pos[1])}} xValue={pos[0]} yValue={pos[1]} fade={5}/>)
-    //     setGrid(temp);
-    //     setActiveTargets(targets);
-    // } 
+        console.log("TargetClick")
+        let pos; 
+        setGrid(prev=>{
+            let temp = prev;
+            temp.push([x,y]);
+            temp = shuffle(temp);
+            pos = temp.pop(); 
+            return temp;
+        })
+        setActiveTargets((prev) => ([...prev, <Target onClick={() => {targetClick(pos[0],pos[1])}} xValue={pos[0]} yValue={pos[1]} fade={5}/>]))
+        //forceRender([])
+      },[]);
 
     useEffect(() => {
         let targetPos = [];
@@ -56,7 +45,7 @@ const Grid = () => {
         setActiveTargets(targets);
         console.log("targetPos",targetPos)
         console.log("targets",targets)
-    },[]);
+    },[targetClick]);
 
     return(<div className="game-area">
     {activeTargets}
