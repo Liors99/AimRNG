@@ -2,10 +2,9 @@ const io = require('./server.js').io;
 
 const MAX_ANGLES_NUM = 128;
 
-let all_angles = [0.3, 0.85];
+let all_angles = [];
 
 io.on('connection', (socket) => {
-    //console.log(socket);
     socket.on('Entry', (angle) => {
         addToAngleStack(angle);
     });
@@ -19,8 +18,6 @@ const addToAngleStack = (angle) => {
     }
 
     all_angles.push(angle);
-
-    //console.log(all_angles);
 }
 
 
@@ -98,20 +95,22 @@ const getRandomNumber = () => {
     //Make a deep copy of the angles to avoid race conditions
     const all_angles_copy = [...all_angles];
 
-    let M = []
-    let M_prime = []
+    if (all_angles_copy.length > 0) {
+        let M = []
+        let M_prime = []
 
 
-    for (let i = 0; i < all_angles_copy.length; i++) {
-        angle_mantissa = getMentissa(all_angles_copy[i])
-        angle_mantissa_reverse = reverse(angle_mantissa)
-        M.push(calcMentissaToFloat(angle_mantissa))
-        M_prime.push(calcMentissaToFloat(angle_mantissa_reverse))
+        for (let i = 0; i < all_angles_copy.length; i++) {
+            angle_mantissa = getMentissa(all_angles_copy[i])
+            angle_mantissa_reverse = reverse(angle_mantissa)
+            M.push(calcMentissaToFloat(angle_mantissa))
+            M_prime.push(calcMentissaToFloat(angle_mantissa_reverse))
+        }
+
+        console.log(M)
+        console.log(M_prime)
+        console.log(HashFunction3(M, M_prime));
     }
-
-    console.log(M)
-    console.log(M_prime)
-    console.log(HashFunction3(M, M_prime));
 }
 
 function reverse(s) {
@@ -127,8 +126,6 @@ const getMentissa = (s) => {
         menstissa = menstissa + "0".repeat(52 - menstissa.length);
     }
 
-    //console.log(menstissa)
-
     return menstissa;
 }
 
@@ -143,8 +140,3 @@ const calcMentissaToFloat = (m) => {
 }
 
 setInterval(getRandomNumber, 3000)
-
-//console.log((0.456).toString(2))
-//getMentissa(85.125)
-
-//console.log(calcMentissaToFloat("00011"))
