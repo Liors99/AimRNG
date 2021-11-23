@@ -23,3 +23,5 @@ app.use(express.json());
 http.listen(port, () => {
     console.log("Listening on port " + port);
 });
+
+require('./RandomNumberGenerator');
