@@ -4,6 +4,8 @@ const MAX_ANGLES_NUM = 128;
 
 let all_angles = [];
 
+let prev_angles = [];
+
 io.on('connection', (socket) => {
     socket.on('Entry', (angle) => {
         addToAngleStack(angle);
@@ -95,7 +97,7 @@ const getRandomNumber = () => {
     //Make a deep copy of the angles to avoid race conditions
     const all_angles_copy = [...all_angles];
 
-    if (all_angles_copy.length > 0) {
+    if (all_angles_copy.length > 0 && all_angles_copy.length == MAX_ANGLES_NUM && JSON.stringify(prev_angles) != JSON.stringify(all_angles_copy)) {
         let M = []
         let M_prime = []
 
@@ -107,8 +109,7 @@ const getRandomNumber = () => {
             M_prime.push(calcMentissaToFloat(angle_mantissa_reverse))
         }
 
-        console.log(M)
-        console.log(M_prime)
+        prev_angles = all_angles_copy;
         console.log(HashFunction3(M, M_prime));
     }
 }
