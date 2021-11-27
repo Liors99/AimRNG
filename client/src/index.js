@@ -2,18 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Grid from './components/Grid';
 import { getMousePos } from './MouseMovementCapture';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Grid />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
 
 getMousePos();
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
