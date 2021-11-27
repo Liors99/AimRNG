@@ -26,8 +26,6 @@
 .target {
     width: 65px;
     height: 65px;
-    background-color: white;
-    border-radius: 50%;
 }
 
 .launchGameButton {

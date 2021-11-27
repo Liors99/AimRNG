@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './AimTrainer.css';
 import randomNumber from "./RandomNumber";
 import target from "../Target.png"
-
+import constants from "../constants";
 
 const AimTrainer = () => {
   const [left, setLeft] = useState(null);
@@ -10,6 +10,7 @@ const AimTrainer = () => {
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [timer, setTimer] = useState(null);
+  const [isVisible, setVisible] = useState(true);
 
   const getPosition = () => {
     let leftPosition = randomNumber(0, 90);
@@ -20,17 +21,16 @@ const AimTrainer = () => {
 
   const decreaseTimer = (i) => {
     setTimeout(() => {
-      setTimer(60 - i);
-      console.log(60 - i);
+      setTimer(constants.GAME_LENGTH - i);
     }, 1000 * i);
   };
 
   const resetTimer = () => {
-    setTimer(60);
+    setTimer(constants.GAME_LENGTH);
   };
 
   const launchTimer = () => {
-    for (let i = 60; i > 0; i--) {
+    for (let i = constants.GAME_LENGTH; i > 0; i--) {
       decreaseTimer(i);
     }
     console.log("end of the decrease")
@@ -60,11 +60,22 @@ const AimTrainer = () => {
                    'top': `${top}%`
                  }}
                  onClick={(event) => {
-                   getPosition();
+                   setVisible(false);
+                   setTimeout(1000 * constants.DELAY);
+                   setTimeout(() => {
+                    console.log(constants.DELAY);
+                    getPosition();
+                    setVisible(true);
+                  }, 1000 * constants.DELAY);
                    countShot();
                  }}
-            >
-              <img src={target} style={{width:"65px", height:"65px"}} alt="target1"/>
+            >{
+              isVisible?
+              <img src={target} style={{width:"65px", height:"65px", backgroundColor: "white",
+              borderRadius: "50%"}} alt="target1"/>
+              :
+              <div></div>
+            }
             </div>
             : <p className="launchGameButton" onClick={() => {
               setScore(0);
