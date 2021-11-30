@@ -9,6 +9,10 @@ let prev_angles = [];
 io.on('connection', (socket) => {
     socket.on('Entry', (angle) => {
         addToAngleStack(angle);
+
+        setTimeout(() => {
+            getRandomNumber();
+        }, 1000);
     });
 });
 
@@ -140,4 +144,4 @@ const calcMentissaToFloat = (m) => {
     return output
 }
 
-setInterval(getRandomNumber, 3000)
+//setInterval(getRandomNumber, 3000)
